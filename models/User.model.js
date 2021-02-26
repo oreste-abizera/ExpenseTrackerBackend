@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     ],
     unique: [true, "email already taken"],
   },
-  phoneNumber: {
+  phone: {
     type: String,
     minlength: [10, "Phone number has to be 10 characters"],
     maxlength: [10, "Phone number has to be 10 characters"],
