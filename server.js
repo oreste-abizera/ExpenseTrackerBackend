@@ -1,3 +1,8 @@
+const path = require("path");
+//LOAD ENV VARS
+const dotenv = require("dotenv");
+dotenv.config({ path: path.join(__dirname, "/config/config.env") });
+
 const express = require("express");
 require("colors");
 
