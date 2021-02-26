@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 module.exports.registerUser = asyncHandler(async (req, res) => {
   //register user
   console.log("Register user");
+  console.log(req.body);
 });
 
 module.exports.loginUser = asyncHandler(async (req, res) => {
