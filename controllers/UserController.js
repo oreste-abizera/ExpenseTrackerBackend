@@ -26,9 +26,27 @@ module.exports.registerUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports.loginUser = asyncHandler(async (req, res) => {
-  //login user
-  console.log("Login user");
+module.exports.loginUser = asyncHandler(async (req, res, next) => {
+  const { identifier, password } = req.body;
+  if (!identifier || !password) {
+    return next(new ErrorResponse("Enter identifier and password", 400));
+  }
+  let user;
+  user = await UserModel.findOne({ email: identifier }).select("+password");
+  if (!user) {
+    user = await UserModel.findOne({ phone: identifier }).select("+password");
+  }
+
+  if (user) {
+    if (!(await user.comparePasswords(password))) {
+      user = null;
+    }
+  }
+
+  if (!user) {
+    return next(new ErrorResponse("Invalid credentials.", 401));
+  }
+  await sendTokenResponse(user, 200, res);
 });
 
 module.exports.updateUser = asyncHandler(async (req, res) => {
