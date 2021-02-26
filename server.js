@@ -5,6 +5,7 @@ dotenv.config({ path: path.join(__dirname, "/config/config.env") });
 
 const express = require("express");
 require("colors");
+require("./config/db");
 
 const app = express();
 const ErrorHandler = require("./middlewares/error");
