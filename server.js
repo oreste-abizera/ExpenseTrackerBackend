@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: path.join(__dirname, "/config/config.env") });
 
 const express = require("express");
+const cors = require("cors");
 require("colors");
 require("./config/db");
 
@@ -11,6 +12,7 @@ const app = express();
 const ErrorHandler = require("./middlewares/error");
 
 app.use(express.json());
+app.use(cors());
 
 //importing routes
 const UserRoutes = require("./routes/UserRoutes");
