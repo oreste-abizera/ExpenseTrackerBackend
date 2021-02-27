@@ -38,3 +38,33 @@ module.exports.getSingleCategory = asyncHandler(async (req, res, next) => {
     data: category,
   });
 });
+
+module.exports.updateCategory = asyncHandler(async (req, res, next) => {
+  const { title } = req.body;
+  if (!title) {
+    return next(new ErrorResponse("No data to update provided"));
+  }
+  const updatedCategory = await CategoryModel.findByIdAndUpdate(
+    req.params.id,
+    { title },
+    { new: true, runValidators: true }
+  );
+  if (!updatedCategory) {
+    return next(new ErrorResponse("Updating category failed"));
+  }
+  res.json({
+    success: true,
+    data: updatedCategory,
+  });
+});
+
+module.exports.deleteCategory = asyncHandler(async (req, res, next) => {
+  const deletedCategory = await CategoryModel.findByIdAndDelete(req.params.id);
+  if (!deletedCategory) {
+    return next(new ErrorResponse("Deleting category failed", 500));
+  }
+  res.json({
+    success: true,
+    data: deletedCategory,
+  });
+});
