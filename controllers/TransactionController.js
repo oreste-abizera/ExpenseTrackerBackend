@@ -3,7 +3,10 @@ const TransactionModel = require("../models/Transaction.model");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 module.exports.addTransaction = asyncHandler(async (req, res, next) => {
-  let transaction = await TransactionModel.create(req.body);
+  let transaction = await TransactionModel.create({
+    ...req.body,
+    user: req.user._id,
+  });
   if (!transaction) {
     return next(new ErrorResponse("Adding transaction failed..."));
   }
@@ -14,7 +17,10 @@ module.exports.addTransaction = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getIncomes = asyncHandler(async (req, res, next) => {
-  let transactions = await TransactionModel.find({ type: "income" });
+  let transactions = await TransactionModel.find({
+    type: "income",
+    user: req.user._id,
+  });
   if (!transactions) {
     return next(new ErrorResponse("Getting incomes failed."));
   }
@@ -25,7 +31,10 @@ module.exports.getIncomes = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getExpenses = asyncHandler(async (req, res, next) => {
-  let transactions = await TransactionModel.find({ type: "expense" });
+  let transactions = await TransactionModel.find({
+    type: "expense",
+    user: req.user._id,
+  });
   if (!transactions) {
     return next(new ErrorResponse("Getting incomes failed."));
   }
@@ -36,7 +45,7 @@ module.exports.getExpenses = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getTransactions = asyncHandler(async (req, res, next) => {
-  let transactions = await TransactionModel.find();
+  let transactions = await TransactionModel.find({ user: req.user._id });
   if (!transactions) {
     return next(new ErrorResponse("Getting transactions failed."));
   }
@@ -47,7 +56,10 @@ module.exports.getTransactions = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
-  let transaction = await TransactionModel.findById(req.params.id);
+  let transaction = await TransactionModel.findOne({
+    _id: req.params.id,
+    user: req.user._id,
+  });
   if (!transaction) {
     return next(new ErrorResponse("Getting transaction failed."));
   }
@@ -58,8 +70,8 @@ module.exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.updateTransaction = asyncHandler(async (req, res, next) => {
-  let updatedTransaction = await TransactionModel.findByIdAndUpdate(
-    req.params.id,
+  let updatedTransaction = await TransactionModel.findOneAndUpdate(
+    { _id: req.params.id, user: req.user._id },
     req.body,
     { new: true, runValidators: true }
   );
@@ -73,9 +85,10 @@ module.exports.updateTransaction = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.deleteTransaction = asyncHandler(async (req, res, next) => {
-  let deletedTransaction = await TransactionModel.findByIdAndDelete(
-    req.params.id
-  );
+  let deletedTransaction = await TransactionModel.findOneAndDelete({
+    _id: req.params.id,
+    user: req.user._id,
+  });
   if (!deletedTransaction) {
     return next(new ErrorResponse("deleting transaction failed."));
   }
