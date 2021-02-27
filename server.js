@@ -14,6 +14,7 @@ app.use(express.json());
 
 //importing routes
 const UserRoutes = require("./routes/UserRoutes");
+const CategoryRoutes = require("./routes/CategoryRoutes");
 
 app.get("/", (req, res) => {
   res.json({
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", UserRoutes);
+app.use("/api/categories", CategoryRoutes);
 
 app.use(ErrorHandler);
 
