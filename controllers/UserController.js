@@ -49,9 +49,24 @@ module.exports.loginUser = asyncHandler(async (req, res, next) => {
   await sendTokenResponse(user, 200, res);
 });
 
-module.exports.updateUser = asyncHandler(async (req, res) => {
+module.exports.updateUser = asyncHandler(async (req, res, next) => {
   //Update user profile
-  console.log("Update user info");
+  const userData = ({ names, email, phone } = req.body);
+  if (!userData.names && !userData.email && !userData.phone) {
+    return next(new ErrorResponse("no new info provided", 400));
+  }
+
+  let updateduser = await UserModel.findByIdAndUpdate(req.user._id, userData, {
+    new: true,
+    runValidators: true,
+  });
+  if (!updateduser) {
+    return next(new ErrorResponse("Error occured", 500));
+  }
+  res.json({
+    success: true,
+    user: updateduser,
+  });
 });
 
 //send token response
