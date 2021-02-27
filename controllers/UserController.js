@@ -65,7 +65,7 @@ module.exports.updateUser = asyncHandler(async (req, res, next) => {
   }
   res.json({
     success: true,
-    user: updateduser,
+    data: updateduser,
   });
 });
 
@@ -75,6 +75,6 @@ const sendTokenResponse = asyncHandler(async (user, statusCode, res) => {
   res.status(statusCode).json({
     success: true,
     token,
-    user,
+    data: user,
   });
 });
