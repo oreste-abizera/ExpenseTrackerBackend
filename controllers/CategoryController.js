@@ -3,9 +3,9 @@ const CategoryModel = require("../models/Category.model");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 module.exports.addCategory = asyncHandler(async (req, res, next) => {
-  const { title } = req.body;
+  const { title, color, icon } = req.body;
 
-  let category = await CategoryModel.create({ title });
+  let category = await CategoryModel.create({ title, color, icon });
   if (!category) {
     return next(
       new ErrorResponse("Error occured while creating category", 500)
@@ -40,13 +40,13 @@ module.exports.getSingleCategory = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.updateCategory = asyncHandler(async (req, res, next) => {
-  const { title } = req.body;
-  if (!title) {
+  const { title, color, icon } = req.body;
+  if (!title && !color && !icon) {
     return next(new ErrorResponse("No data to update provided"));
   }
   const updatedCategory = await CategoryModel.findByIdAndUpdate(
     req.params.id,
-    { title },
+    req.body,
     { new: true, runValidators: true }
   );
   if (!updatedCategory) {
