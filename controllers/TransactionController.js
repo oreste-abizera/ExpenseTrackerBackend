@@ -45,7 +45,9 @@ module.exports.getExpenses = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getTransactions = asyncHandler(async (req, res, next) => {
-  let transactions = await TransactionModel.find({ user: req.user._id });
+  let transactions = await TransactionModel.find({
+    user: req.user._id,
+  }).populate("category");
   if (!transactions) {
     return next(new ErrorResponse("Getting transactions failed."));
   }
@@ -59,7 +61,7 @@ module.exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
   let transaction = await TransactionModel.findOne({
     _id: req.params.id,
     user: req.user._id,
-  });
+  }).populate("category");
   if (!transaction) {
     return next(new ErrorResponse("Getting transaction failed."));
   }
