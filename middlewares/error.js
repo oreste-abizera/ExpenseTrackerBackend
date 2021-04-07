@@ -17,7 +17,6 @@ const ErrorHandler = (err, req, res, next) => {
     //targetting duplicate on sync transaction
     const { date, note, user } = err.keyPattern;
     if (date === 1 && note === 1 && user === 1) {
-      console.log("object");
       return res.json({
         success: true,
       });

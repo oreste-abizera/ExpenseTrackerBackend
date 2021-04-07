@@ -105,13 +105,11 @@ module.exports.syncTransactions = asyncHandler(async (req, res, next) => {
   if (transactions.length > 0) {
     let inserted = await TransactionModel.create(transactions);
     if (inserted) {
-      console.log(inserted);
       return res.json({
         success: true,
       });
     } else {
-      console.log("Syncing.........");
-      // return next(new ErrorResponse("Syncing failed.", 500));
+      return next(new ErrorResponse("Syncing failed.", 500));
     }
   }
   return next(new ErrorResponse("Errorrrrr", 500));
