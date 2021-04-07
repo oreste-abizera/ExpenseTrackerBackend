@@ -7,6 +7,7 @@ const {
   getSingleTransaction,
   updateTransaction,
   deleteTransaction,
+  syncTransactions,
 } = require("../controllers/TransactionController");
 const { protect } = require("../middlewares/Auth");
 
@@ -19,5 +20,6 @@ Router.route("/:id")
   .get(protect, getSingleTransaction)
   .put(protect, updateTransaction)
   .delete(protect, deleteTransaction);
+Router.route("/sync").post(protect, syncTransactions);
 
 module.exports = Router;

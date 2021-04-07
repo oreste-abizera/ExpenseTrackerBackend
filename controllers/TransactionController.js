@@ -99,3 +99,19 @@ module.exports.deleteTransaction = asyncHandler(async (req, res, next) => {
     data: deletedTransaction,
   });
 });
+
+module.exports.syncTransactions = asyncHandler(async (req, res, next) => {
+  const { transactions = [] } = req.body;
+  if (transactions.length > 0) {
+    let inserted = await TransactionModel.create(transactions);
+    if (inserted) {
+      console.log(inserted);
+      return res.json({
+        success: true,
+      });
+    } else {
+      return next(new ErrorResponse("Syncing failed.", 500));
+    }
+  }
+  return next(new ErrorResponse("Errorrrrr", 500));
+});
