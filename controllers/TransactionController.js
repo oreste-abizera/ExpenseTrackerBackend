@@ -110,7 +110,8 @@ module.exports.syncTransactions = asyncHandler(async (req, res, next) => {
         success: true,
       });
     } else {
-      return next(new ErrorResponse("Syncing failed.", 500));
+      console.log("Syncing.........");
+      // return next(new ErrorResponse("Syncing failed.", 500));
     }
   }
   return next(new ErrorResponse("Errorrrrr", 500));

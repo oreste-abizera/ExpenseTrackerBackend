@@ -13,6 +13,15 @@ const ErrorHandler = (err, req, res, next) => {
   if (error.code === 11000) {
     const message = "duplicate field value entered";
     error = new ErrorResponse(message, 400);
+
+    //targetting duplicate on sync transaction
+    const { date, note, user } = err.keyPattern;
+    if (date === 1 && note === 1 && user === 1) {
+      console.log("object");
+      return res.json({
+        success: true,
+      });
+    }
   }
 
   // Mongoose validation error
